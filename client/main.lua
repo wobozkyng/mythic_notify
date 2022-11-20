@@ -1,37 +1,52 @@
-RegisterNetEvent("mythic_notify:client:SendAlert")
-AddEventHandler("mythic_notify:client:SendAlert", function(data)
-	DoHudText(data.type, data.text)
+RegisterNetEvent('mythic_notify:client:SendAlert')
+AddEventHandler('mythic_notify:client:SendAlert', function(data)
+	SendAlert(data.type, data.text, data.length, data.style)
 end)
 
-function DoShortHudText(type, text)
-	SendNUIMessage({
-		action = 'shortnotif',
-		type = type,
-		text = text
-	})
-end
+RegisterNetEvent('mythic_notify:client:SendUniqueAlert')
+AddEventHandler('mythic_notify:client:SendUniqueAlert', function(data)
+	SendUniqueAlert(data.id, data.type, data.text, data.length, data.style)
+end)
 
-function DoHudText(type, text)
-	SendNUIMessage({
-		action = 'notif',
-		type = type,
-		text = text
-	})
-end
 
-function DoLongHudText(type, text)
-	SendNUIMessage({
-		action = 'longnotif',
-		type = type,
-		text = text
-	})
-end
+RegisterNetEvent('mythic_notify:client:PersistentAlert')
+AddEventHandler('mythic_notify:client:PersistentAlert', function(data)
+	PersistentAlert(data.action, data.id, data.type, data.text, data.style)
+end)
 
-function DoCustomHudText(type, text, length)
+function SendAlert(type, text, length, style)
 	SendNUIMessage({
-		action = 'customnotif',
 		type = type,
 		text = text,
-		length = length
+		length = length,
+		style = style
 	})
+	print(text)
+end
+
+function SendUniqueAlert(id, type, text, length, style)
+	SendNUIMessage({
+		id = id,
+		type = type,
+		text = text,
+		style = style
+	})
+end
+
+function PersistentAlert(action, id, type, text, style)
+	if action:upper() == 'START' then
+		PlaySoundFrontend(-1, 'Click', 'DLC_HEIST_HACKING_SNAKE_SOUNDS', 0)
+		SendNUIMessage({
+			persist = action,
+			id = id,
+			type = type,
+			text = text,
+			style = style
+		})
+	elseif action:upper() == 'END' then
+		SendNUIMessage({
+			persist = action,
+			id = id
+		})
+	end
 end
