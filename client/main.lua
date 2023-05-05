@@ -35,7 +35,6 @@ end
 
 function PersistentAlert(action, id, type, text, style)
 	if action:upper() == 'START' then
-		PlaySoundFrontend(-1, 'Click', 'DLC_HEIST_HACKING_SNAKE_SOUNDS', 0)
 		SendNUIMessage({
 			persist = action,
 			id = id,
